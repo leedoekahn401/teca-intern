@@ -32,4 +32,4 @@
 
 * **Website:** [5sfashion.vn](https://5sfashion.vn)
 * **Customer Support:** Available via hotline, online chat, and nationwide store locations.
-* **Shipping & Returns:** Doorstep delivery with flexible return and exchange policies across Vietnam.
+* **Shipping & Returns:** Doorstep delivery with flexible return and exchange policies across Vietnam."# stiu_base" 
