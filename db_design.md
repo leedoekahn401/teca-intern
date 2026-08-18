@@ -129,8 +129,12 @@ erDiagram
         UUID id PK
         UUID user_id FK
         UUID voucher_id FK
+        varchar(255) recipient_name
         varchar(20) phone_number
-        decimal(15,2) total_amount
+        decimal(15,2) subtotal_amount "Tổng tiền hàng"
+        decimal(15,2) shipping_fee "Phí vận chuyển"
+        decimal(15,2) discount_amount "Tiền giảm giá voucher/khuyến mãi"
+        decimal(15,2) final_amount "Tổng thanh toán thực tế"
         varchar(50) status
         varchar(500) address
         varchar(1000) description
