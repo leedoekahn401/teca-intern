@@ -7,9 +7,9 @@ erDiagram
         varchar(50) role "e.g. 'ADMIN', 'CUSTOMER', 'STAFF'"
         varchar(50) status "e.g. 'ACTIVE', 'INACTIVE', 'BANNED'"
         boolean is_email_verified "DEFAULT false"
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     refresh_tokens {
@@ -27,9 +27,9 @@ erDiagram
         UUID id PK
         varchar(500) name
         varchar(1000) description
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     product_images {
@@ -41,7 +41,7 @@ erDiagram
         varchar(100) color "Nullable"
         int index_order
         boolean is_primary "True for main product picture"
-        timestamp created_at
+        timestamptz created_at
     }
 
     product_categories {
@@ -54,19 +54,22 @@ erDiagram
         UUID parent_id FK "Nullable (for sub-categories)"
         varchar(255) name "e.g., 'Women', 'Baby', 'Men'"
         varchar(255) description
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     product_variants {
         UUID id PK
         UUID product_id FK
+        varchar(100) sku UK "Stock Keeping Unit e.g., '5S-POLO-BLK-L'"
         int quantity
         varchar(100) color
         varchar(100) size
-        double price
-        timestamp updated_at
+        decimal(15,2) price
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     product_discount {
@@ -77,14 +80,14 @@ erDiagram
     discounts {
         UUID id PK
         varchar(50) discount_type "'PERCENTAGE' or 'FIXED_AMOUNT'"
-        double value
-        double max_discount_amount "Nullable (Cap for percentage discounts)"
+        decimal(15,2) value
+        decimal(15,2) max_discount_amount "Nullable (Cap for percentage discounts)"
         varchar(500) description
-        timestamp valid_from
-        timestamp valid_until
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz valid_from
+        timestamptz valid_until
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     user_voucher {
@@ -98,23 +101,23 @@ erDiagram
         UUID id PK
         varchar(50) code UK "e.g., 'SUMMER2026', 'WELCOME50'"
         varchar(50) discount_type "'PERCENTAGE' or 'FIXED_AMOUNT'"
-        double value
-        double max_discount_amount "Nullable (Cap for percentage discounts)"
-        double minimum_spend
-        timestamp valid_from
-        timestamp valid_until
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        decimal(15,2) value
+        decimal(15,2) max_discount_amount "Nullable (Cap for percentage discounts)"
+        decimal(15,2) minimum_spend
+        timestamptz valid_from
+        timestamptz valid_until
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     tags {
         UUID id PK
         varchar(50) code
         varchar(255) name
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
     product_tags {
@@ -127,12 +130,12 @@ erDiagram
         UUID user_id FK
         UUID voucher_id FK
         varchar(20) phone_number
-        double total_amount
+        decimal(15,2) total_amount
         varchar(50) status
         varchar(500) address
         varchar(1000) description
-        timestamp created_at
-        timestamp updated_at
+        timestamptz created_at
+        timestamptz updated_at
     }
 
     order_items {
@@ -145,22 +148,24 @@ erDiagram
         varchar(100) size "Snapshot: size at checkout"
         varchar(500) thumbnail_url "Snapshot: image URL at checkout"
         int quantity
-        decimal unit_price "Snapshot: unit price at checkout"
-        decimal total_price "quantity * unit_price"
+        decimal(15,2) unit_price "Snapshot: unit price at checkout"
+        decimal(15,2) total_price "quantity * unit_price"
     }
 
     carts {
         UUID id PK
         UUID user_id FK
-        timestamp created_at
-        timestamp updated_at
+        timestamptz created_at
+        timestamptz updated_at
     }
 
     cart_items {
         UUID id PK
-        UUID cart_id FK
-        UUID product_variant_id FK
+        UUID cart_id FK "Composite UK (cart_id, product_variant_id)"
+        UUID product_variant_id FK "Composite UK (cart_id, product_variant_id)"
         int quantity
+        timestamptz created_at
+        timestamptz updated_at
     }
 
     %% Product Categories (Many-to-Many)
@@ -179,6 +184,10 @@ erDiagram
     %% Product Discounts (Many-to-Many via junction)
     products ||--o{ product_discount : "has"
     discounts ||--o{ product_discount : "applied_to"
+
+    %% User Vouchers (Many-to-Many via junction)
+    users ||--o{ user_voucher : "claims"
+    vouchers ||--o{ user_voucher : "assigned_to"
     
     %% Product Tags (Many-to-Many via junction)
     products ||--o{ product_tags : "categorized_by"
