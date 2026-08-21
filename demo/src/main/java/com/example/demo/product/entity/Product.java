@@ -1,5 +1,7 @@
 package com.example.demo.product.entity;
 
+
+
 import com.example.demo.common.entity.BaseAuditEntity;
 import com.example.demo.discount.entity.Discount;
 import jakarta.persistence.CascadeType;

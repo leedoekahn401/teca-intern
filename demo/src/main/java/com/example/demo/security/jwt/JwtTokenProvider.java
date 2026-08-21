@@ -40,8 +40,8 @@ public class JwtTokenProvider {
         String secret = jwtProperties.getSecretKey();
         byte[] keyBytes;
         try {
-            // Attempt hex decoding first
-            keyBytes = Decoders.HEX.decode(secret);
+            // Attempt hex decoding first (Java 17 HexFormat)
+            keyBytes = java.util.HexFormat.of().parseHex(secret);
         } catch (Exception e) {
             try {
                 // Fallback to base64 decoding
