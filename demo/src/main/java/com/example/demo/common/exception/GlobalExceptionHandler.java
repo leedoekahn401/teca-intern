@@ -31,6 +31,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(TokenRefreshException.class)
     public ResponseEntity<ApiResponse<Void>> handleTokenRefreshException(TokenRefreshException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
