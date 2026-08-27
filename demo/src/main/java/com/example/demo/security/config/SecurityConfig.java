@@ -41,8 +41,11 @@ public class SecurityConfig {
             "/api/v1/auth/**",
             "/h2-console/**",
             "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
             "/swagger-ui/**",
             "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**",
             "/error",
             "/actuator/**"
     };
