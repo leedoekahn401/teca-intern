@@ -1,5 +1,6 @@
 package com.example.demo.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,26 +18,25 @@ import java.util.List;
 public class PageResponse<T> {
 
     private List<T> content;
-    private int pageNumber;
+
+    @JsonProperty("pageNo")
+    private int pageNo;
+
     private int pageSize;
     private long totalElements;
     private int totalPages;
-    private boolean isLast;
-    private boolean isFirst;
-    private boolean hasNext;
-    private boolean hasPrevious;
+
+    @JsonProperty("last")
+    private boolean last;
 
     public static <T> PageResponse<T> fromPage(Page<T> page) {
         return PageResponse.<T>builder()
                 .content(page.getContent())
-                .pageNumber(page.getNumber())
+                .pageNo(page.getNumber())
                 .pageSize(page.getSize())
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages())
-                .isLast(page.isLast())
-                .isFirst(page.isFirst())
-                .hasNext(page.hasNext())
-                .hasPrevious(page.hasPrevious())
+                .last(page.isLast())
                 .build();
     }
 }
